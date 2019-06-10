@@ -1,10 +1,17 @@
-# Start SonarQube
+# Init
+
+```bash
+git clone
+git submodule init
+```
+
+## Start SonarQube
 
 ```bash
 docker-compouse up -d
 ```
 
-## Install plugins
+### Install plugins
 
 ```bash
 curl -X POST  -u admin:admin "http://localhost:9000/api/plugins/install?key=crowd"
@@ -26,11 +33,13 @@ curl -X POST  -u admin:admin "http://localhost:9000/api/plugins/install?key=xml"
 curl -X POST  -u admin:admin "http://localhost:9000/api/plugins/install?key=scmsvn"
 ```
 
-### Add checkmarx plugin
+#### Add checkmarx plugin
 
 ```bash
 docker run --rm -it -v sonarqube_sonarqube_extensions:/mnt -v "$(pwd)/sonar-checkmarx-plugin-solidlab-webportal-1.0.jar:/tmp/sonar-checkmarx-plugin-solidlab-webportal-1.0.jar" alpine:3.6 /bin/sh
 ### inside container
+### copy jar file
+cp /tmp/sonar-checkmarx-plugin-solidlab-webportal-1.0.jar /mnt/plugins/sonar-checkmarx-plugin-solidlab-webportal-1.0.jar
 ### check uid/gid
 ls -n /mnt/plugins/
 ### chown to uid/gid
@@ -40,8 +49,11 @@ chown 999:999 /mnt/plugins/sonar-checkmarx-plugin-solidlab-webportal-1.0.jar
 Restart SonarQube
 
 ```bash
-docker-compose restarr sonarqube
+docker-compose restart sonarqube
 ```
 
+#### Scanning
 
-https://github.com/SonarSource/sonar-scanning-examples/tree/master/sonarqube-scanner-maven
+```bash
+docker run -it --network=sonarqube_sonarnet --rm --name my-maven-project -v ~/.m2/repository:/root/.m2  -v "$(pwd)":/usr/src/mymaven -w /usr/src/mymaven/sonar-scanning-examples/sonarqube-scanner-maven/ maven:3.6-jdk-8 mvn clean verify sonar:sonar -Dsonar.host.url=http://sonarqube:9000
+```
