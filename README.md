@@ -8,7 +8,7 @@ git submodule init
 ## Start SonarQube
 
 ```bash
-docker-compouse up -d
+docker-compose up -d
 ```
 
 ### Install plugins
@@ -36,14 +36,14 @@ curl -X POST  -u admin:admin "http://localhost:9000/api/plugins/install?key=scms
 #### Add checkmarx plugin
 
 ```bash
-docker run --rm -it -v sonarqube_sonarqube_extensions:/mnt -v "$(pwd)/sonar-checkmarx-plugin-solidlab-webportal-1.0.jar:/tmp/sonar-checkmarx-plugin-solidlab-webportal-1.0.jar" alpine:3.6 /bin/sh
+docker run --rm -it -v sonarqube_sonarqube_extensions:/mnt -v "$(pwd)/sonarqube-checkmarx-solidlab-plugin-1.0.jar:/tmp/sonarqube-checkmarx-solidlab-plugin-1.0.jar" alpine:3.6 /bin/sh
 ### inside container
 ### copy jar file
-cp /tmp/sonar-checkmarx-plugin-solidlab-webportal-1.0.jar /mnt/plugins/sonar-checkmarx-plugin-solidlab-webportal-1.0.jar
+cp /tmp/sonarqube-checkmarx-solidlab-plugin-1.0.jar /mnt/plugins/
 ### check uid/gid
 ls -n /mnt/plugins/
 ### chown to uid/gid
-chown 999:999 /mnt/plugins/sonar-checkmarx-plugin-solidlab-webportal-1.0.jar
+chown -R 999:999 /mnt/plugins/
 ```
 
 Restart SonarQube
