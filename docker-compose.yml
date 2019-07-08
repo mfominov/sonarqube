@@ -2,7 +2,7 @@ version: "2"
 
 services:
   sonarqube:
-    image: sonarqube:7.0
+    image: sonarqube:7.9-community
     ports:
       - "9000:9000"
     networks:
@@ -16,6 +16,8 @@ services:
 
   db:
     image: postgres:11.3-alpine
+    ports:
+      - "5432:5432"
     networks:
       - sonarnet
     environment:
